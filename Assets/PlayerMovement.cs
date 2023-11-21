@@ -16,10 +16,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform groundCheck; // Ground check
     [SerializeField] LayerMask groundLayer; // Ground layer
 
+    Vector2 respawnPoint; // Where the player will respawn
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        respawnPoint = transform.position; // Setting the player's respawn point
     }
 
     // Update is called once per frame
@@ -53,6 +56,14 @@ public class PlayerMovement : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Death"))
+        {
+            transform.position = respawnPoint; // Teleport the player back to spawn when they touch the death zone
         }
     }
 
