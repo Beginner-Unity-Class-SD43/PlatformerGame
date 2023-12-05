@@ -18,10 +18,13 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 respawnPoint; // Where the player will respawn
 
+    Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>(); // Get the player's rigidbody
+        anim = GetComponent<Animator>(); // Get the player's animator
         respawnPoint = transform.position; // Setting the player's respawn point
     }
 
@@ -40,6 +43,24 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
 
+        if(CheckIfGrounded() && horizontal == 0) // Sets idle to true
+        {
+            anim.SetBool("idle", true);
+            anim.SetBool("run", false);
+            anim.SetBool("jump", false);
+        }
+        else if(horizontal != 0 && CheckIfGrounded()) // Sets run to true
+        {
+            anim.SetBool("run", true);
+            anim.SetBool("idle", false);
+            anim.SetBool("jump", false);
+        }
+        else if(!CheckIfGrounded() && rb.velocity.y != 0) // Sets jump to true
+        {
+            anim.SetBool("jump", true);
+            anim.SetBool("idle", false);
+            anim.SetBool("run", false);
+        }
 
 
         Flip();
