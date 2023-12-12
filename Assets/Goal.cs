@@ -5,10 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class Goal : MonoBehaviour
 {
+
+    [SerializeField] AudioClip goal;
+
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -21,8 +26,15 @@ public class Goal : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            StartCoroutine(LoadNextScene());
         }
+    }
+
+    IEnumerator LoadNextScene()
+    {
+        audioSource.PlayOneShot(goal);
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
